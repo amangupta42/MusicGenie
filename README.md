@@ -50,10 +50,12 @@ recommender_model.py login input -t "free text"
 ```
 input
    -t "Free Text" (String)
-   -p Reuired popularity (Integer)
    -l Requested length of playlist (Integer)
 ```
 8. When you run the code for the first time, you will be redirected to spotify for a one time authorization. Once you log in, this will not happen again.
 
 9. If there is no length specified in the optional arguments, the default length is set to 20, that means, by default, a playlist of 20 songs will be created for every request.
+
+10. The logs are stored in [logs.log](/logs.log) file which shows what songs are added to the playlist. These are also printed on the terminal
+![log](/images/playlist.png)
 
