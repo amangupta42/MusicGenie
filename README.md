@@ -21,10 +21,9 @@ This project aims to create a working model and application that converts free t
    ```
    git clone https://github.com/amangupta42/Free-text-music-recommendation.git
    ```
-3. Install all the required libraries by installing the requirements.  
+3. Install all the required libraries by installing the requirements in the requirements.txt file with the command
 
-- requirements.txt
-  ```sh
+  ```
   pip install -r requirements.txt
   ```
 4. Update `config.py` with your credentials for both Spotify Id (Both CLIENT ID and SECRET ID)
