@@ -36,10 +36,10 @@ def generate_params(model_input, args):
     # Uses separate XGB models to predict values from all 12 song parameters used by Spotify
 
     # Create dictionary to be added to (with popularity if argument has been passed)
-    if args.popularity:
-        input_to_spotify_transformer = {'target_popularity': args.popularity}
-    else:
-        input_to_spotify_transformer = {}
+    # if args.popularity:
+    #     input_to_spotify_transformer = {'target_popularity': args.popularity}
+    # else:
+    input_to_spotify_transformer = {}
 
     # Find the XGB files
     xgboost_files = os.path.join("model/*_model_xgb_384")
