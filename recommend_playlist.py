@@ -67,6 +67,8 @@ def recommend(param_dict, genre_list, sp, args):
     if result:
         track_uris = []
         track_names = []
+        cover_arts = []
+        artists = []
         if args.verbose > 0:
             print('Playlist')
         for track in result['tracks']:
@@ -74,13 +76,15 @@ def recommend(param_dict, genre_list, sp, args):
             print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
             track_uris.append(track['uri'])
             track_names.append(track['name'])
+            cover_arts.append( track['album']['images'][0]['url'])
+            artists.append((track['album']['artists'][0])['name'])
         logging.info("Tracks added to playlist")
         for name in track_names:
             logging.info(name)
     else:
         logging.warning(f"Nothing was returned from Spotify for url {param_dict}.")
         raise Exception("Nothing returned from Spotify.")
-    return track_uris
+    return track_uris,track_names,cover_arts,artists
 
 
 def create_spotify_playlist(track_uris, input_text, sp, args):

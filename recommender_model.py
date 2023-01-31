@@ -12,6 +12,7 @@ import xgboost
 from recommend_playlist import *
 import logging
 from parse_args import parse_args
+import csv
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
@@ -60,7 +61,6 @@ def generate_params(model_input, args):
 def main():
     # Get user arguments
     args = parse_args(sys.argv[1:])
-
     # Generate playlist using embedded user input and predicted genre by user's criteria
     if args.command == 'input':
         try:
@@ -78,11 +78,31 @@ def main():
             params = generate_params(embedded_text, args)
 
             #Recommend songs based on target params
-            tracks = recommend(params, genres, sp, args)
+            tracks,names,cover_art,artists = recommend(params, genres, sp, args)
+
             print("Recommended tracks")
             print(tracks)
 
             create_spotify_playlist(tracks, args.text, sp, args)
+
+
+            f = open("tracklist.csv", "w")
+            headers = ["Name" ,"AlbumArt", "Artist(s)"]
+            csvwriter = csv.writer(f)
+            csvwriter.writerow(headers)
+            for i in range(len(names)):
+                data = [names[i],cover_art[i],artists[i]]
+                csvwriter.writerow(data)
+            f.close()
+
+            with open('tracklist.csv') as f:
+                songs = [{k: v for k, v in row.items()}
+                for row in csv.DictReader(f, skipinitialspace=True)]
+            final = json.dumps(songs,indent = 2)
+            print(final)
+                
+
+
 
         # Error Handling
         except ValueError as e:
