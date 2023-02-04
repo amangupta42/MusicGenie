@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-import os
-import time
+import subprocess
 import csv
 import json
 from recommend_playlist import *
@@ -28,8 +27,8 @@ async def read_root() -> dict:
 
 @app.get("/input")
 def start(text: str):
-    os.system("recommend_model.py input -t \""+text+"\"")
-    time.sleep(2)
+    subprocess.run(['python3', 'recommender_model.py', 'input', '-t', text])
+    
     songs =[]
     with open('tracklist.csv') as f:
         songs = [{k: v for k, v in row.items()}
