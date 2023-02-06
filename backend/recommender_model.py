@@ -83,23 +83,36 @@ def main():
             print("Recommended tracks")
             print(tracks)
 
-            create_spotify_playlist(tracks, args.text, sp, args)
+            playlist_link = create_spotify_playlist(tracks, args.text, sp, args)
 
+            response_json = {"playlist_link" : playlist_link, "songs" : []}
 
-            f = open("tracklist.csv", "w")
-            headers = ["Name" ,"AlbumArt", "Artist(s)"]
-            csvwriter = csv.writer(f)
-            csvwriter.writerow(headers)
             for i in range(len(names)):
-                data = [names[i],cover_art[i],artists[i]]
-                csvwriter.writerow(data)
-            f.close()
+                curr = {
+                    "Name" : names[i],
+                    "AlbumArt" : cover_art[i],
+                    "Artist" : artists[i]
+                }
+                response_json["songs"].append(curr)
+            response_json = json.dumps(response_json,indent=3)
 
-            with open('tracklist.csv') as f:
-                songs = [{k: v for k, v in row.items()}
-                for row in csv.DictReader(f, skipinitialspace=True)]
-            final = json.dumps(songs,indent = 2)
-            print(final)
+            # f = open("tracklist.csv", "w")
+            # headers = ["Name" ,"AlbumArt", "Artist"]
+            # csvwriter = csv.writer(f)
+            # csvwriter.writerow(headers)
+            # for i in range(len(names)):
+            #     data = [names[i],cover_art[i],artists[i]]
+            #     csvwriter.writerow(data)
+            # f.close()
+
+            # with open('tracklist.csv') as f:
+            #     songs = [{k: v for k, v in row.items()}
+            #     for row in csv.DictReader(f, skipinitialspace=True)]
+            # final = json.dumps(songs,indent = 2)
+            print(response_json)
+            with open("response.json", "w") as outfile:
+                json.dump(response_json, outfile)
+            
                 
 
 

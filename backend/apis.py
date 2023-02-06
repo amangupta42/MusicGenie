@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 import subprocess
 import csv
 import json
 from recommend_playlist import *
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -11,6 +12,9 @@ origins = [
     "http://localhost:3000",
     "localhost:3000"
 ]
+
+class FreeText(BaseModel):
+    text: str
 
 
 app.add_middleware(
@@ -25,16 +29,14 @@ app.add_middleware(
 async def read_root() -> dict:
     return {"message": "Welcome to playlist generator."}
 
-@app.get("/input")
-def start(text: str):
-    subprocess.run(['python3', 'recommender_model.py', 'input', '-t', text])
+@app.post("/input")
+async def get_input(request: FreeText):
     
-    songs =[]
-    with open('tracklist.csv') as f:
-        songs = [{k: v for k, v in row.items()}
-        for row in csv.DictReader(f, skipinitialspace=True)]
-    final = json.dumps(songs,indent = 2)
-    return Response(content=final, media_type="application/json")
+    subprocess.run(['python3', 'recommender_model.py', 'input', '-t', request.text])
+    
+    f = open('response.json', 'r')
+    response_json = json.loads(f.read())
+    return Response(content=response_json, media_type="application/json")
 
 
 
