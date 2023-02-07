@@ -1,15 +1,15 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Logo from './headphones32.png';
 
-export const BaseContainer = styled(Container)(({theme, props }) => ({
+export const BaseContainer = styled(Container)(({theme, props={} }) => ({
   	display: 'flex',
 	flexDirection: `${props.flexdir ? props.flexdir : 'row'}`,
 	justifyContent: `${props.justifycontent ? props.justifycontent : 'center'}`,
 	padding:`${props.padding ? props.padding : '64px 20px'}`,
 	background : `${props.custombg ? props.custombg : 'white'}`, 
+	backgroundImage: `${props.backgroundimage ? props.backgroundimage : 'none'}`,
 	height: '100vh',
 	color: `${props.customcol ? props.customcol : 'white'}`,
 	[theme.breakpoints.down('sm')]: {

@@ -1,12 +1,25 @@
-import logo from './logo.svg';
+import React from 'reactn';
+import { createTheme, ThemeProvider } from '@mui/material';
 import './App.css';
-import Landing from './pages/Landing';
+import Home from './pages/Home';
+
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Itim',
+      'cursive',
+    ].join(','),
+  },});
+
 
 function App() {
   return (
-    <div className="App">
-      < Landing />
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        < Home />
+      </div>
+    </ThemeProvider>
   );
 }
 
