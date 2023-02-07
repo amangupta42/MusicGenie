@@ -1,8 +1,0 @@
-[17:29:28 2023-01-22] FETCHING Version 2.16.0
-[17:29:28 2023-01-22] DOWNLOADING https://github.com/spicetify/spicetify-cli/releases/download/v2.16.0/spicetify-2.16.0-darwin-arm64.tar.gz
-[17:29:29 2023-01-22] EXTRACTING /Users/aman/.spicetify/spicetify.tar.gz
-[17:29:29 2023-01-22] SETTING EXECUTABLE PERMISSIONS TO /Users/aman/.spicetify/spicetify
-[17:29:29 2023-01-22] REMOVING /Users/aman/.spicetify/spicetify.tar.gz
-[17:29:29 2023-01-22] spicetify path already set in /Users/aman/.zshrc, continuing...
-[17:29:29 2023-01-22] spicetify v2.16.0 was installed successfully to /Users/aman/.spicetify
-[17:29:29 2023-01-22] Run 'spicetify --help' to get started
