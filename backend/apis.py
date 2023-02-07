@@ -5,6 +5,7 @@ import csv
 import json
 from recommend_playlist import *
 from pydantic import BaseModel
+import recommender_model
 
 app = FastAPI()
 
@@ -31,12 +32,11 @@ async def read_root() -> dict:
 
 @app.post("/input")
 async def get_input(request: FreeText):
+
+    #subprocess.run(['python3', 'recommender_model.py', 'input', '-t', request.text])
+    response = recommender_model.main(request.text)
     
-    subprocess.run(['python3', 'recommender_model.py', 'input', '-t', request.text])
-    
-    f = open('response.json', 'r')
-    response_json = json.loads(f.read())
-    return Response(content=response_json, media_type="application/json")
+    return Response(content=response, media_type="application/json")
 
 
 

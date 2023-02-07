@@ -21,17 +21,17 @@ def authorize():
     return sp
 
 
-def predict_genre(args):
+def predict_genre(text : str):
     # Returns the most similar genres
 
     with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
         similarity_model = pickle.load(ce_file)
 
-    input_text = args.text
+    
 
     # Take all combinations of the text and genre
     genres = cfg.genres
-    sentence_combinations = [[input_text, genre] for genre in genres]
+    sentence_combinations = [[text, genre] for genre in genres]
 
     # find the similarity scores between the text and each genre
     similarity_scores = similarity_model.predict(sentence_combinations)
@@ -41,8 +41,6 @@ def predict_genre(args):
     top_genres = []
     top_scores = []
     for idx in sim_scores_sorted:
-        if args.verbose > 2:
-            print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
         if len(top_genres) < 5:
             top_genres.append(genres[idx])
             top_scores.append(similarity_scores[idx])
@@ -52,16 +50,14 @@ def predict_genre(args):
             top_genres = top_genres[:i + 1]
             break
 
-    if args.verbose > 0:
-        print(f"Genres to be passed to Spotify: {top_genres}")
     return top_genres
 
 
-def recommend(param_dict, genre_list, sp, args):
+def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    result = sp.recommendations(seed_genres=genre_list, limit=args.length, **param_dict)
+    result = sp.recommendations(seed_genres=genre_list, limit=length, **param_dict)
 
     # Iterate over response from Spotify, taking track URIs from recommended tracks
     if result:
@@ -69,8 +65,7 @@ def recommend(param_dict, genre_list, sp, args):
         track_names = []
         cover_arts = []
         artists = []
-        if args.verbose > 0:
-            print('Playlist')
+        
         for track in result['tracks']:
             
             print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
@@ -87,7 +82,7 @@ def recommend(param_dict, genre_list, sp, args):
     return track_uris,track_names,cover_arts,artists
 
 
-def create_spotify_playlist(track_uris, input_text, sp, args):
+def create_spotify_playlist(track_uris, input_text, sp):
     # Creates a spotify playlist from a list of track_uris
 
     user_id = sp.me()['id']
@@ -98,16 +93,10 @@ def create_spotify_playlist(track_uris, input_text, sp, args):
     playlists = sp.user_playlists(user_id)
     playlist_uid = playlists['items'][0]['id']
     playlist_link = f"https://open.spotify.com/playlist/{playlist_uid}"
-    if args.verbose > 1:
-        print(f"Track URIs: {track_uris}")
+    
 
     # Add tracks
     sp.playlist_add_items(playlist_uid, track_uris)
     logging.info(f"Spotify playlist '{playlist_to_add}' was created for Spotify user '{user_id}'.")
 
-    if args.verbose > 1:
-        print(f"User ID: {user_id}")
-        print(f"Playlist name: {playlist_to_add}")
-    if args.verbose > 0:
-        print(playlist_link)
     return playlist_link
