@@ -65,6 +65,7 @@ def recommend(param_dict, genre_list, sp, length):
         track_names = []
         cover_arts = []
         artists = []
+        preview_url = []
         
         for track in result['tracks']:
             
@@ -73,13 +74,14 @@ def recommend(param_dict, genre_list, sp, length):
             track_names.append(track['name'])
             cover_arts.append( track['album']['images'][0]['url'])
             artists.append((track['album']['artists'][0])['name'])
+            preview_url.append((track['preview_url']))
         logging.info("Tracks added to playlist")
         for name in track_names:
             logging.info(name)
     else:
         logging.warning(f"Nothing was returned from Spotify for url {param_dict}.")
         raise Exception("Nothing returned from Spotify.")
-    return track_uris,track_names,cover_arts,artists
+    return track_uris,track_names,cover_arts,artists,preview_url
 
 
 def create_spotify_playlist(track_uris, input_text, sp):

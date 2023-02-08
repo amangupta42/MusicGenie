@@ -1,7 +1,7 @@
 
 #This is the developer details. Only change the client ID and secret according to the information in the SPotify Developer Account.
-CLIENT_ID = "36214424349b420aba2854960ad972a1"
-CLIENT_SECRET = "9b17d9a7300b4f66b8f65b65003f0a5e"
+CLIENT_ID = "fd03f464343c44a99e7326a92127ff7e"
+CLIENT_SECRET = "2fd02f0aaa5d47e9a9acd3d5caa4d6c0"
 REDIRECT_URI = "http://localhost:8080/callback"
 
 AUTH_URL = 'https://accounts.spotify.com/api/token'
