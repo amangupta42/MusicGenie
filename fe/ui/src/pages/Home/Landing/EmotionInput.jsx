@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useGlobal } from 'reactn';
 import { Box, Typography, TextField, Button } from '@mui/material';
+import { CONSTS } from '../../../common/Consts.jsx';
 
 const EmotionInput = ({setSongsLoading}) => {
 
@@ -48,21 +49,28 @@ const EmotionInput = ({setSongsLoading}) => {
 			justifyContent: 'space-between'
 
 		}}>
-			<Typography>
-				Just enter how you feel to get a playlist of songs with similar emotion
-			</Typography>
 			
-			<TextField  value={sentence} onChange={handleInputChange} 
+			<TextField  value={sentence} onChange={handleInputChange}
 				multiline 
 				maxRows="8" 
-				placeholder="Feeling happy on a sunny beach!..." 
+				placeholder="" 
 				variant="outlined"
+				// color="black"
+				label="Feeling happy on a sunny beach!!..." color='warning'
 				sx={{
 					minWidth: "300px",
-					margin: '20px 0'
+					margin: '20px 0',
 				}}
 			/>
-			<Button variant="contained" color="success" disabled={isButtonDisabled} onClick={handleClick}>Generate Playlist</Button>
+			<Button variant="contained" 
+			disabled={isButtonDisabled} 
+			onClick={handleClick}
+			sx={{
+				color: `${CONSTS.secondaryColor}`,
+				backgroundColor: 'black',
+			}}>
+				Generate Playlist
+			</Button>
 		</Box>
 	)
 }

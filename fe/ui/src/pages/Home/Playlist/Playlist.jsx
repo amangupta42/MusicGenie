@@ -9,6 +9,11 @@ const Playlist = () => {
 	return (
 		<BaseContainer 
 			maxWidth='xl' 
+			props={{
+				custombg: "#f3a686" ,
+				backgroundimage: 'linear-gradient(45deg, #f3a686 0%, #ffffff 38%)',
+				customcol: "black",
+			}}
 		>
 			<LogoBtn />
 			<Box  sx={{

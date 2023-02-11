@@ -10,7 +10,8 @@ export const BaseContainer = styled(Container)(({theme, props={} }) => ({
 	padding:`${props.padding ? props.padding : '64px 20px'}`,
 	background : `${props.custombg ? props.custombg : 'white'}`, 
 	backgroundImage: `${props.backgroundimage ? props.backgroundimage : 'none'}`,
-	height: '100vh',
+	minHeight: '100vh',
+	overflow: 'auto',
 	color: `${props.customcol ? props.customcol : 'white'}`,
 	[theme.breakpoints.down('sm')]: {
       padding: '20px'

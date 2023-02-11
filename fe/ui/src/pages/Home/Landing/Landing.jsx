@@ -14,8 +14,8 @@ const Landing = () => {
 		<BaseContainer 
 			maxWidth='xl' 
 			props={{
-				custombg: "#08AEEA" ,
-				backgroundimage: 'linear-gradient(31deg, #08AEEA 16%, #2AF598 62%)',
+				custombg: "#f3a686" ,
+				backgroundimage: 'linear-gradient(45deg, #f3a686 0%, #ffffff 38%)',
 				customcol: "black",
 			}}
 			
@@ -39,10 +39,15 @@ const Landing = () => {
 					<LogoBtn />
 					<Box  sx={{
 						height: 'fit-content',
-						display: 'block',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center'
 					}}>
-						<Typography variant='h2'>
-							MoodToMusic
+						<Typography variant='h1'>
+							MusicGenie
+						</Typography>
+						<Typography variant='h4' sx={{color:'#f57b42'}}>
+							Just enter how you feel to get a playlist of songs with similar emotion
 						</Typography>
 					</Box>
 

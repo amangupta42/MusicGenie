@@ -1,6 +1,6 @@
 import React from 'reactn';
 import { Box, Typography } from '@mui/material';
-import Logo from '../../../common/headphones32.png';
+// import Logo from '../../../common/headphones32.png';
 
 const Song = (({title, artist, image}) => {
 	return (
@@ -11,8 +11,9 @@ const Song = (({title, artist, image}) => {
 		margin: '10px',
 		border: '1px solid black',
 		borderBottom: '1px solid black',
-		color: 'black',
-		borderRadius: '5px'
+		color: 'inherit',
+		borderRadius: '5px',
+		// backgroundColor: 'rgba(245, 123, 66, 0.5)'
 	}}>
 		<Box sx={{
 			paddingLeft: '50px',
@@ -23,7 +24,7 @@ const Song = (({title, artist, image}) => {
 			backgroundImage: `url(${image})`,
 			backgroundPosition: 'top left',
 			backgroundRepeat: 'no-repeat',
-			backgroundSize: '40px'
+			backgroundSize: '40px',
 		}}>
 			
 			<Typography variant='subtitle' sx={{
