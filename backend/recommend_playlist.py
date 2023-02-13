@@ -1,6 +1,6 @@
 import config as cfg
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 import logging
 import pickle
 import numpy as np
@@ -10,14 +10,18 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
                     level=logging.INFO)
 
 
-def authorize():
+def authorizeUser(access_token):
 
     # Tell spotify which user data fields we need to access and modify
     scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
-                                                   client_secret=cfg.CLIENT_SECRET,
-                                                   redirect_uri=cfg.REDIRECT_URI,
-                                                   scope=scope))
+    sp = spotipy.Spotify(auth=access_token)
+    return sp
+
+def authorizeApp():
+
+    scope = 'user-library-read'
+    sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id=cfg.CLIENT_ID,
+                                                   client_secret=cfg.CLIENT_SECRET))
     return sp
 
 

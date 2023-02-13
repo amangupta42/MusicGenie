@@ -6,13 +6,13 @@ import os
 import pickle
 from sentence_transformers import SentenceTransformer
 import config as cfg
-import torch
 import numpy as np
-import xgboost
 from recommend_playlist import *
 import logging
 #from parse_args import parse_args
 import csv
+
+
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
@@ -59,7 +59,7 @@ def main(text : str, length : int = 20):
 
     try:
         #Auth
-        sp = authorize()
+        sp = authorizeApp()
         #Genre Prediction
         genres = predict_genre(text)
         print("Predicted genre from text input: ")
@@ -77,9 +77,7 @@ def main(text : str, length : int = 20):
         print("Recommended tracks")
         print(tracks)
 
-        playlist_link = create_spotify_playlist(tracks, text, sp)
-
-        response_json = {"playlist_link" : playlist_link, "songs" : []}
+        response_json = {"songs" : []}
 
         for i in range(len(names)):
             curr = {
@@ -91,11 +89,10 @@ def main(text : str, length : int = 20):
             response_json["songs"].append(curr)
         response_json = json.dumps(response_json,indent=3)
 
-        return response_json
+        return response_json, tracks
+
+
         
-            
-
-
 
     # Error Handling
     except ValueError as e:
@@ -108,6 +105,3 @@ def main(text : str, length : int = 20):
         print(e)
         logging.critical(e)
 
-
-if __name__ == '__main__':
-    main()

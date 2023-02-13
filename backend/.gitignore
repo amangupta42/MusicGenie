@@ -3,5 +3,5 @@ install.log
 .ipynb_checkpoints/
 .cache
 __pycache__/
-.cache
 .gitattributes
+logs.log
