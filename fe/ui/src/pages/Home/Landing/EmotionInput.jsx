@@ -1,36 +1,56 @@
 import React, { useState, useEffect, useGlobal } from 'reactn';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { CONSTS } from '../../../common/Consts.jsx';
+import { Options } from './Options.jsx';
 
 const EmotionInput = ({setSongsLoading}) => {
 
 	const [sentence, setSentence] = useState("")
 	const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+	const [expandOptions, setExpandOptions] = useState(false)
+	const [playlistLen, setPlaylistLen] = useState(20)
+
 	const [gsetSongsLoaded, setgSongsLoaded] = useGlobal('songsLoaded')
 	const [gSongs, setgSongs] = useGlobal('songs');
 	const [gPlaylistLink, setgPlaylistLink] = useGlobal('playlist_link');
+
 
 	const handleInputChange = (event) => {
 		setSentence(event.target.value)
 	}
 
 	const handleClick = async (event) => {
-		const dataObj = {text : sentence};
+		const dataObj = {
+			text : sentence,
+			length: playlistLen
+		};
 		setSongsLoading(true)
-		const response = await fetch('http://localhost:8000/input',{
-			method: 'POST',
-			headers: {
-		      'Content-Type': 'application/json',
-		    },
-		    body: JSON.stringify(dataObj)
-		});
+		const response = null
+		try {
+			// throw new Error(`HTTP error:`);
+			response = await fetch('http://localhost:8000/input',{
+				method: 'POST',
+				headers: {
+			      'Content-Type': 'application/json',
+			    },
+			    body: JSON.stringify(dataObj)
+			})
+			console.log({response})
+			const responseJSON = await response.json();
+			setgSongs(responseJSON.songs)
+			setgPlaylistLink(responseJSON)
+			setgSongsLoaded(true)
+		} catch {
+			console.log("error");
+		} finally {
+			setSongsLoading(false)
+		}
 		
-		const responseJSON = await response.json();
-		setgSongs(responseJSON.songs)
-		setgPlaylistLink(responseJSON)
-		setSongsLoading(false)
-		setgSongsLoaded(true)
 	}
+
+	const toggleExpandOptions = () => {
+		setExpandOptions(!expandOptions)
+	} 
 
 	useEffect(() => {
 		if(sentence.length > 0) {
@@ -49,22 +69,35 @@ const EmotionInput = ({setSongsLoading}) => {
 			justifyContent: 'space-between'
 
 		}}>
-			
-			<TextField  value={sentence} onChange={handleInputChange}
-				multiline 
-				maxRows="8" 
-				placeholder="" 
-				variant="outlined"
-				// color="black"
-				label="Feeling happy on a sunny beach!!..." color='warning'
-				sx={{
-					minWidth: "300px",
-					margin: '20px 0',
-				}}
-			/>
+			<Box marginBottom='20px'>
+				<TextField  value={sentence} onChange={handleInputChange}
+					multiline 
+					maxRows="8" 
+					placeholder="" 
+					variant="outlined"
+					label={CONSTS.emotionLabel} color='warning'
+					sx={{
+						minWidth: "300px",
+						margin: '20px 0 5px 0',
+					}}
+				/>
+				<Typography variant="caption" display="block" onClick={toggleExpandOptions} sx={{
+					width: 'fit-content',
+    				marginLeft: 'auto',
+    				cursor: 'pointer',
+    				color: `${CONSTS.secondaryColor}`
+				}}>
+					{expandOptions? 'Less' : 'More'}
+				</Typography>
+				{expandOptions? 
+				<Options setPlaylistLen={setPlaylistLen}/> 
+				: 
+				null
+				}
+			</Box>
 			<Button variant="contained" 
 			disabled={isButtonDisabled} 
-			onClick={handleClick}
+			onClick={(e) => {handleClick(e)}}
 			sx={{
 				color: `${CONSTS.secondaryColor}`,
 				backgroundColor: 'black',

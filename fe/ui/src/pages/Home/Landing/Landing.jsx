@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { BaseContainer, LogoBtn } from '../../../common/Components.jsx';
 import { EmotionInput } from './EmotionInput.jsx';
+import { Loader } from './Loader.jsx';
 
 const Landing = () => {
 	const [ songsLoading, setSongsLoading] = useState(false)
-
-	useEffect(() => {
-		console.log(songsLoading)
-	},[songsLoading])
 
 	return (
 		<BaseContainer 
@@ -22,14 +19,7 @@ const Landing = () => {
 		>	
 			{
 				songsLoading ? 
-				<Box  sx={{
-					height: 'fit-content',
-					display: 'block',
-				}}>
-					<Typography variant='h2'>
-						LOADING ...
-					</Typography>
-				</Box>
+				<Loader/>
 				:
 				<Box sx={{
 					display:'flex',
