@@ -27,6 +27,7 @@ const EmotionInput = ({setSongsLoading}) => {
 		setSongsLoading(true)
 		const response = null
 		try {
+			console.log("HERE")
 			// throw new Error(`HTTP error:`);
 			response = await fetch('http://localhost:8000/input',{
 				method: 'POST',
@@ -35,15 +36,15 @@ const EmotionInput = ({setSongsLoading}) => {
 			    },
 			    body: JSON.stringify(dataObj)
 			})
+		} catch {
+			console.log("error");
+		} finally {
+			setSongsLoading(false)
 			console.log({response})
 			const responseJSON = await response.json();
 			setgSongs(responseJSON.songs)
 			setgPlaylistLink(responseJSON)
 			setgSongsLoaded(true)
-		} catch {
-			console.log("error");
-		} finally {
-			setSongsLoading(false)
 		}
 		
 	}
@@ -75,10 +76,11 @@ const EmotionInput = ({setSongsLoading}) => {
 					maxRows="8" 
 					placeholder="" 
 					variant="outlined"
-					label={CONSTS.emotionLabel} color='warning'
+					label={CONSTS.emotionLabel} 
+					color='warning'
 					sx={{
 						minWidth: "300px",
-						margin: '20px 0 5px 0',
+						marginBottom: '5px',
 					}}
 				/>
 				<Typography variant="caption" display="block" onClick={toggleExpandOptions} sx={{
@@ -90,7 +92,7 @@ const EmotionInput = ({setSongsLoading}) => {
 					{expandOptions? 'Less' : 'More'}
 				</Typography>
 				{expandOptions? 
-				<Options setPlaylistLen={setPlaylistLen}/> 
+				<Options playlistLen={playlistLen} setPlaylistLen={setPlaylistLen}/> 
 				: 
 				null
 				}

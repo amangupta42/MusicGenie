@@ -2,6 +2,7 @@ import React from 'reactn';
 import { createTheme, ThemeProvider } from '@mui/material';
 import './App.css';
 import Home from './pages/Home';
+import { CONSTS } from './common/Consts.jsx';
 
 
 const theme = createTheme({
@@ -10,7 +11,13 @@ const theme = createTheme({
       'Itim',
       'cursive',
     ].join(','),
-  },});
+  },
+  palette: {
+    secondary: {
+      main: `${CONSTS.secondaryColor}`
+    }
+  }
+  });
 
 
 function App() {

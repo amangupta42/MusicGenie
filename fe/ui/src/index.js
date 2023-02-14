@@ -8,23 +8,7 @@ import { setGlobal } from 'reactn';
 setGlobal({
   playlist_link: "",
   songsLoaded: false,
-  songs: [
-    {
-      Artist: 'The Weekend',
-      Name: 'Take my Breath',
-      AlbumArt: 'random'
-    },
-    {
-      Artist: 'The Weekend',
-      Name: 'Take my Breath',
-      AlbumArt: 'random'
-    },
-    {
-      Artist: 'The Weekend',
-      Name: 'Take my Breath',
-      AlbumArt: 'random'
-    }
-  ]
+  songs: []
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

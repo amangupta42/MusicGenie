@@ -3,7 +3,7 @@ import Landing from './Landing';
 import Playlist from './Playlist';
 
 const Home = () => {
-	const [ gsongsLoaded, setgSongsLoaded ] = useGlobal('songsLoaded')
+	const [ gsongsLoaded, setgSongsLoaded ] = useGlobal('songsLoaded');
 	return (
 		<>
 		{

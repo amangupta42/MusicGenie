@@ -1,7 +1,7 @@
 import React from 'reactn';
 import { Box, Typography } from '@mui/material';
 import { Puff } from 'react-loading-icons';
-import { CONSTS} from '../../../common/Consts';
+import { CONSTS } from '../../../common/Consts';
 
 
 const Loader = () => {
