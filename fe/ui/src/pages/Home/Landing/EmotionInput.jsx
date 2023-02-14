@@ -14,7 +14,6 @@ const EmotionInput = ({setSongsLoading}) => {
 	const [gSongs, setgSongs] = useGlobal('songs');
 	const [gPlaylistLink, setgPlaylistLink] = useGlobal('playlist_link');
 
-
 	const handleInputChange = (event) => {
 		setSentence(event.target.value)
 	}
@@ -25,10 +24,10 @@ const EmotionInput = ({setSongsLoading}) => {
 			length: playlistLen
 		};
 		setSongsLoading(true)
-		const response = null
+		let response = null
+		let responseJSON = null
 		try {
 			console.log("HERE")
-			// throw new Error(`HTTP error:`);
 			response = await fetch('http://localhost:8000/input',{
 				method: 'POST',
 				headers: {
@@ -36,15 +35,21 @@ const EmotionInput = ({setSongsLoading}) => {
 			    },
 			    body: JSON.stringify(dataObj)
 			})
-		} catch {
-			console.log("error");
+		} catch (error){
+			console.log(error);
 		} finally {
-			setSongsLoading(false)
-			console.log({response})
-			const responseJSON = await response.json();
-			setgSongs(responseJSON.songs)
-			setgPlaylistLink(responseJSON)
-			setgSongsLoaded(true)
+			if(response){
+				try { 
+					responseJSON = await response.json();
+				} catch(error) {
+					console.log(error)
+				} finally {
+					setgSongs(responseJSON.songs)
+					setgPlaylistLink(responseJSON)
+					setgSongsLoaded(true)
+					setSongsLoading(false)
+				}
+			}	
 		}
 		
 	}

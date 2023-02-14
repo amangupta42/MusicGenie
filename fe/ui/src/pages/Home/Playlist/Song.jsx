@@ -1,8 +1,9 @@
-import React from 'reactn';
+import React , { useEffect } from 'reactn';
 import { Box, Typography } from '@mui/material';
 // import Logo from '../../../common/headphones32.png';
 
 const Song = (({title, artist, image}) => {
+
 	return (
 		<Box sx={{
 		maxHeight: '50px',

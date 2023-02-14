@@ -4,7 +4,7 @@ import { BaseContainer, LogoBtn } from '../../../common/Components.jsx';
 import { Song } from './Song';
 
 const Playlist = () => {
-	const [gSongs] = useGlobal('songs');
+	const [gSongs, setgSongs] = useGlobal('songs');
 
 	return (
 		<BaseContainer 
@@ -23,10 +23,10 @@ const Playlist = () => {
 				<Typography variant='h2'>
 					{gSongs.map((song) => (
 						<Song 
-						key={song.Name}
-						title={song.Name}
-						artist={song.Artist}
-						image={song.AlbumArt}/>
+						key={song.name}
+						title={song.name}
+						artist={song.artist}
+						image={song.albumArt}/>
 					))}
 				</Typography>
 			</Box>
