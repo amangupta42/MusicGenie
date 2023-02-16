@@ -1,16 +1,10 @@
 import json
-import sys
-import pandas as pd
 import glob
 import os
 import pickle
-from sentence_transformers import SentenceTransformer
 import config as cfg
-import numpy as np
 from recommend_playlist import *
 import logging
-#from parse_args import parse_args
-import csv
 
 
 
@@ -89,7 +83,7 @@ def main(text : str, length : int = 20):
             response_json["songs"].append(curr)
         response_json = json.dumps(response_json,indent=3)
 
-        return response_json, tracks
+        return response_json
 
 
         

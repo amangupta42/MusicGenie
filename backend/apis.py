@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import subprocess
 import csv
 import json
+from typing import List
 import recommend_playlist
 from pydantic import BaseModel
 import recommender_model
@@ -18,6 +19,9 @@ class baseRequest(BaseModel):
     text: str
     length: int
 
+class createPlaylistRequest(BaseModel):
+    title: str
+    songs: List[str]
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,19 +38,15 @@ async def read_root() -> dict:
 @app.post("/input")
 async def get_input(request: baseRequest):
 
-    response, tracks = recommender_model.main(request.text, request.length)
+    response = recommender_model.main(request.text, request.length)
     return Response(content=response, media_type="application/json")
 
-@app.put("/create")
-async def create_playlist(token: str = Header(None)):
+@app.post("/create")
+async def create_playlist(playlist : createPlaylistRequest,token: str = Header(None)):
     
-    # if uris == []:
-    #     raise HTTPException(status_code=500, detail='Timed out, try again')
-    # if token == None:
-    #     raise HTTPException(status_code = 404, detail = 'Invalid login')
     sp = recommend_playlist.authorizeUser(access_token=token)
-    playlist_link = recommend_playlist.create_spotify_playlist(uris,text,sp)
-
+    playlist = json.dumps(playlist.dict())
+    playlist_link = recommend_playlist.create_spotify_playlist(playlist["songs"],playlist.title,sp)
     return Response(content = playlist_link, media_type = "application/json")
 
 

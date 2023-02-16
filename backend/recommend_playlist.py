@@ -2,6 +2,7 @@ import config as cfg
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import logging
+import json
 import pickle
 import numpy as np
 
@@ -61,7 +62,7 @@ def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    result = sp.recommendations(seed_genres=genre_list, limit=length, **param_dict)
+    result = sp.recommendations(seed_genres=genre_list, limit=length,country="US", **param_dict)
 
     # Iterate over response from Spotify, taking track URIs from recommended tracks
     if result:
@@ -70,9 +71,8 @@ def recommend(param_dict, genre_list, sp, length):
         cover_arts = []
         artists = []
         preview_url = []
-        
+        print(json.dumps(result))
         for track in result['tracks']:
-            
             print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
             track_uris.append(track['uri'])
             track_names.append(track['name'])
@@ -92,7 +92,7 @@ def create_spotify_playlist(track_uris, input_text, sp):
     # Creates a spotify playlist from a list of track_uris
 
     user_id = sp.me()['id']
-    playlist_to_add = f"{input_text} - DL Project"
+    playlist_to_add = f"{input_text} - {user_id}"
 
     # Create playlist from given track URIs
     sp.user_playlist_create(user_id, playlist_to_add)
