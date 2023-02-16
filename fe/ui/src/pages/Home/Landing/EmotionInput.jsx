@@ -27,7 +27,6 @@ const EmotionInput = ({setSongsLoading}) => {
 		let response = null
 		let responseJSON = null
 		try {
-			console.log("HERE")
 			response = await fetch('http://localhost:8000/input',{
 				method: 'POST',
 				headers: {
