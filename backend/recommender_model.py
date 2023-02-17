@@ -17,12 +17,10 @@ PARAMS = ['target_acousticness', 'target_danceability', 'target_energy', 'target
 
 def embed_text(text):
     #Use a HuggingFace sentence-transformers/all-MiniLM-L6-v2 model to map sentences & paragraphs to a 384 dimensional dense vector space
-
     with open('MiniLMTransformer.pkl', 'rb') as f:
         embedder = pickle.load(f)
 
     # Embed input text
-    
     input_to_model = embedder.encode(text)
     return input_to_model
 
@@ -47,17 +45,13 @@ def generate_params(model_input):
 
 
 def main(text : str, length : int = 20):
-    # Get user arguments
-    # args = parse_args(sys.argv[1:])
-    # Generate playlist using embedded user input and predicted genre by user's criteria
 
     try:
         #Auth
         sp = authorizeApp()
+
         #Genre Prediction
         genres = predict_genre(text)
-        print("Predicted genre from text input: ")
-        print(genres)
 
         #Text embedding for sentiment analysis
         embedded_text = embed_text(text)
@@ -68,9 +62,7 @@ def main(text : str, length : int = 20):
         #Recommend songs based on target params
         tracks,names,cover_art,artists,preview_url = recommend(params, genres, sp, length)
 
-        print("Recommended tracks")
-        print(tracks)
-
+        #Create response object
         response_json = {"songs" : []}
 
         for i in range(len(names)):
@@ -85,9 +77,6 @@ def main(text : str, length : int = 20):
         response_json = json.dumps(response_json,indent=3)
 
         return response_json
-
-
-        
 
     # Error Handling
     except ValueError as e:
