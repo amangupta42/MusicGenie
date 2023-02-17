@@ -5,22 +5,22 @@ import { Options } from './Options.jsx';
 
 const EmotionInput = ({setSongsLoading}) => {
 
-	const [sentence, setSentence] = useState("")
 	const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 	const [expandOptions, setExpandOptions] = useState(false)
 	const [playlistLen, setPlaylistLen] = useState(20)
 
+	const [gsentence, setgSentence] = useGlobal("userInput")
 	const [gsetSongsLoaded, setgSongsLoaded] = useGlobal('songsLoaded')
 	const [gSongs, setgSongs] = useGlobal('songs');
 	const [gPlaylistLink, setgPlaylistLink] = useGlobal('playlist_link');
 
 	const handleInputChange = (event) => {
-		setSentence(event.target.value)
+		setgSentence(event.target.value)
 	}
 
 	const handleClick = async (event) => {
 		const dataObj = {
-			text : sentence,
+			text : gsentence,
 			length: playlistLen
 		};
 		setSongsLoading(true)
@@ -34,21 +34,22 @@ const EmotionInput = ({setSongsLoading}) => {
 			    },
 			    body: JSON.stringify(dataObj)
 			})
+			responseJSON = await response.json();
+			setgSongs(responseJSON.songs)
+			setgPlaylistLink(responseJSON)
+			// storing spotifySongUrls to provide during playlist create call
+			// console.log(responseJSON)
+			const urls = []
+			 responseJSON.songs.forEach((song) => {urls.push(song.songUrl)});
+			window.localStorage.setItem('song_urls', JSON.stringify(urls))
+
+			setgSongsLoaded(true)
+			setSongsLoading(false)
 		} catch (error){
 			console.log(error);
 		} finally {
-			if(response){
-				try { 
-					responseJSON = await response.json();
-				} catch(error) {
-					console.log(error)
-				} finally {
-					setgSongs(responseJSON.songs)
-					setgPlaylistLink(responseJSON)
-					setgSongsLoaded(true)
-					setSongsLoading(false)
-				}
-			}	
+			setgSongsLoaded(true)
+			setSongsLoading(false)	
 		}
 		
 	}
@@ -58,13 +59,13 @@ const EmotionInput = ({setSongsLoading}) => {
 	} 
 
 	useEffect(() => {
-		if(sentence.length > 0) {
+		if(gsentence.length > 0) {
 			setIsButtonDisabled(false)
 		}
 		else{
 			setIsButtonDisabled(true)
 		}
-	},[sentence])
+	},[gsentence])
 
 	return (
 		<Box sx={{
@@ -75,7 +76,7 @@ const EmotionInput = ({setSongsLoading}) => {
 
 		}}>
 			<Box marginBottom='20px'>
-				<TextField  value={sentence} onChange={handleInputChange}
+				<TextField  value={gsentence} onChange={handleInputChange}
 					multiline 
 					maxRows="8" 
 					placeholder="" 

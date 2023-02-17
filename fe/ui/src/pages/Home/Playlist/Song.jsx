@@ -1,6 +1,5 @@
 import React , { useEffect } from 'reactn';
 import { Box, Typography, Button } from '@mui/material';
-// import Logo from '../../../common/headphones32.png';
 import { CONSTS } from '../../../common/Consts';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 

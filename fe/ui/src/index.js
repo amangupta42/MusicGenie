@@ -7,9 +7,10 @@ import { setGlobal } from 'reactn';
 import { BrowserRouter as Router } from "react-router-dom";
 
 setGlobal({
+  userInput: '',
   playlist_link: "",
   songsLoaded: false,
-  songs: []
+  songs: [],
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
