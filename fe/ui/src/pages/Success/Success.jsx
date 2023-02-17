@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useGlobal } from 'reactn';
 import { Box, Typography } from '@mui/material';
+
 import { BaseContainer } from '../../common/Components';
+import { Header } from './Header';
 
 const Success = () => {
 	const [accessToken,setAccessToken] = useState(null)
@@ -46,8 +48,11 @@ const Success = () => {
 	}, [])
 
 	return (
-		<BaseContainer sx={{color:'black'}}>
-			Success!
+		<BaseContainer maxWidth='xl' 
+		props={{
+			customcol: "black",
+		}}>
+			<Header/>
 		</BaseContainer>
 	)
 }

@@ -13,7 +13,14 @@ const Buttons = () => {
 	}
 
 	const spotifyRedirect = () => {
-		window.location.replace(loginUrl)
+		let token = window.localStorage.getItem("token")
+		if(token){
+			const newUrl = `${window.location.href}success#access_token=${token}`
+			window.location.assign(newUrl)
+		} else {
+			window.location.replace(loginUrl)
+		}
+		
 	}
 
 	return (

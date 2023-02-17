@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { BaseContainer, LogoBtn } from '../../../common/Components.jsx';
 import { EmotionInput } from './EmotionInput.jsx';
 import { Loader } from './Loader.jsx';
+import { CONSTS } from '../../../common/Consts';
 
 const Landing = () => {
 	const [ songsLoading, setSongsLoading] = useState(false)
@@ -34,7 +35,7 @@ const Landing = () => {
 						<Typography variant='h1'>
 							MusicGenie
 						</Typography>
-						<Typography variant='h4' sx={{color:'#f57b42'}}>
+						<Typography variant='h4' sx={{color:`${CONSTS.secondaryColor}`}}>
 							Just enter how you feel to get a playlist of songs with similar emotion
 						</Typography>
 					</Box>
