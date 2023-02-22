@@ -62,8 +62,11 @@ def main(text : str, length : int = 20):
         #Recommend songs based on target params
         tracks,names,cover_art,artists,preview_url = recommend(params, genres, sp, length)
 
+        #Create playlist
+        playlist_link = create_spotify_playlist(tracks,text,sp)
+
         #Create response object
-        response_json = {"songs" : []}
+        response_json = {"playlist_link": playlist_link, "songs" : []}
 
         for i in range(len(names)):
             curr = {

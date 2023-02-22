@@ -1,12 +1,10 @@
-from fastapi import FastAPI, Response, Request, HTTPException, Header
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-import subprocess
-import csv
-import json
 from typing import List
-import recommend_playlist
 from pydantic import BaseModel
 import recommender_model
+from recommend_playlist import *
+
 
 
 app = FastAPI()
@@ -20,8 +18,8 @@ class baseRequest(BaseModel):
     length: int
 
 class createPlaylistRequest(BaseModel):
-    title: str
     songs: List[str]
+    title: str
     token: str
 
 app.add_middleware(
@@ -41,15 +39,6 @@ async def get_input(request: baseRequest):
 
     response = recommender_model.main(request.text, request.length)
     return Response(content=response, media_type="application/json")
-
-@app.post("/create")
-async def create_playlist(playlist : createPlaylistRequest):
-    
-    sp = recommend_playlist.authorizeUser(access_token=playlist.token)
-    playlist = json.dumps(playlist.dict())
-    playlist_link = recommend_playlist.create_spotify_playlist(playlist["songs"],playlist.title,sp)
-    return Response(content = playlist_link, media_type = "application/json")
-
 
 
 
