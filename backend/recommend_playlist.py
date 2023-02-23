@@ -1,8 +1,7 @@
 import config as cfg
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 import logging
-import json
 import pickle
 import numpy as np
 
@@ -11,18 +10,14 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
                     level=logging.INFO)
 
 
-def authorizeUser(access_token):
+def authorize():
 
     # Tell spotify which user data fields we need to access and modify
     scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public"
-    sp = spotipy.Spotify(auth=access_token)
-    return sp
-
-def authorizeApp():
-
-    scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id=cfg.CLIENT_ID,
-                                                   client_secret=cfg.CLIENT_SECRET))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
+                                                   client_secret=cfg.CLIENT_SECRET,
+                                                   redirect_uri=cfg.REDIRECT_URI,
+                                                   scope=scope))
     return sp
 
 
@@ -62,7 +57,7 @@ def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    result = sp.recommendations(seed_genres=genre_list, limit=length,country="US", **param_dict)
+    result = sp.recommendations(seed_genres=genre_list, limit=length, **param_dict)
 
     # Iterate over response from Spotify, taking track URIs from recommended tracks
     if result:
@@ -71,8 +66,9 @@ def recommend(param_dict, genre_list, sp, length):
         cover_arts = []
         artists = []
         preview_url = []
-        print(json.dumps(result))
+        
         for track in result['tracks']:
+            
             print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
             track_uris.append(track['uri'])
             track_names.append(track['name'])
@@ -92,7 +88,7 @@ def create_spotify_playlist(track_uris, input_text, sp):
     # Creates a spotify playlist from a list of track_uris
 
     user_id = sp.me()['id']
-    playlist_to_add = f"{input_text} - {user_id}"
+    playlist_to_add = f"{input_text} - DL Project"
 
     # Create playlist from given track URIs
     sp.user_playlist_create(user_id, playlist_to_add)
