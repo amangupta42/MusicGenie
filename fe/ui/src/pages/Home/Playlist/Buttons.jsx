@@ -15,7 +15,7 @@ const Buttons = () => {
 	const spotifyRedirect = () => {
 		let token = window.localStorage.getItem("token")
 		if(token){
-			const newUrl = `${window.location.href}success#access_token=${token}`
+			const newUrl = `${window.location.href}success`
 			window.location.assign(newUrl)
 		} else {
 			window.location.replace(loginUrl)
@@ -30,7 +30,7 @@ const Buttons = () => {
 			justifyContent: 'center',
 			alignItems: 'center'
 		}}>
-			<Button onClick={spotifyRedirect} sx={{
+			{/*<Button onClick={spotifyRedirect} sx={{
 				boxSizing: 'border-box',
 				minWidth: '150px',
 				minHeight: '60px',
@@ -48,7 +48,7 @@ const Buttons = () => {
 					Get it on Spotify!
 				</Typography>
 				
-			</Button>
+			</Button>*/}
 			<Button onClick={createNewPlaylist} sx={{
 				boxSizing: 'border-box',
 				minWidth: '150px',

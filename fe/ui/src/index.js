@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 setGlobal({
   userInput: '',
-  playlist_link: "",
+  playlist_link: null,
   songsLoaded: false,
   songs: [],
 });

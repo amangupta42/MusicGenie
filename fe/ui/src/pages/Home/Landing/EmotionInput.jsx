@@ -9,7 +9,7 @@ const EmotionInput = ({setSongsLoading}) => {
 	const [expandOptions, setExpandOptions] = useState(false)
 	const [playlistLen, setPlaylistLen] = useState(20)
 
-	const [gsentence, setgSentence] = useGlobal("userInput")
+	const [gSentence, setgSentence] = useGlobal("userInput")
 	const [gsetSongsLoaded, setgSongsLoaded] = useGlobal('songsLoaded')
 	const [gSongs, setgSongs] = useGlobal('songs');
 	const [gPlaylistLink, setgPlaylistLink] = useGlobal('playlist_link');
@@ -20,7 +20,7 @@ const EmotionInput = ({setSongsLoading}) => {
 
 	const handleClick = async (event) => {
 		const dataObj = {
-			text : gsentence,
+			text : gSentence,
 			length: playlistLen
 		};
 		setSongsLoading(true)
@@ -36,7 +36,7 @@ const EmotionInput = ({setSongsLoading}) => {
 			})
 			responseJSON = await response.json();
 			setgSongs(responseJSON.songs)
-			setgPlaylistLink(responseJSON)
+			setgPlaylistLink(responseJSON.playlist_link)
 			// storing spotifySongUrls to provide during playlist create call
 			// console.log(responseJSON)
 			const urls = []
@@ -44,11 +44,11 @@ const EmotionInput = ({setSongsLoading}) => {
 			window.localStorage.setItem('song_urls', JSON.stringify(urls))
 
 			setgSongsLoaded(true)
-			setSongsLoading(false)
 		} catch (error){
+			console.log("HERE BE DRAGONS")
 			console.log(error);
+			setgSongsLoaded(false)
 		} finally {
-			setgSongsLoaded(true)
 			setSongsLoading(false)	
 		}
 		
@@ -59,13 +59,13 @@ const EmotionInput = ({setSongsLoading}) => {
 	} 
 
 	useEffect(() => {
-		if(gsentence.length > 0) {
+		if(gSentence.length > 0) {
 			setIsButtonDisabled(false)
 		}
 		else{
 			setIsButtonDisabled(true)
 		}
-	},[gsentence])
+	},[gSentence])
 
 	return (
 		<Box sx={{
@@ -76,7 +76,7 @@ const EmotionInput = ({setSongsLoading}) => {
 
 		}}>
 			<Box marginBottom='20px'>
-				<TextField  value={gsentence} onChange={handleInputChange}
+				<TextField  value={gSentence} onChange={(e) => handleInputChange(e)}
 					multiline 
 					maxRows="8" 
 					placeholder="" 

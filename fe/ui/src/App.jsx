@@ -30,8 +30,6 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />}>
           </Route>
-          <Route path="/success" element={<Success />}>
-          </Route>
         </Routes>
       </div>
     </ThemeProvider>

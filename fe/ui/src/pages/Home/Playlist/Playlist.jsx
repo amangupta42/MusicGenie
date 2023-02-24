@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { BaseContainer, LogoBtn } from '../../../common/Components.jsx';
 import { Song } from './Song';
 import { Buttons } from './Buttons';
+import { PlaylistLink } from './PlaylistLink';
 
 const Playlist = () => {
 	const [gSongs, setgSongs] = useGlobal('songs');
@@ -20,6 +21,7 @@ const Playlist = () => {
 				flexDirection: 'column'
 			}}>
 				<Buttons/>
+				<PlaylistLink/>
 				<Box  sx={{
 					height: 'fit-content',
 					display: 'block',

@@ -7,7 +7,7 @@ import { Header } from './Header';
 const Success = () => {
 	const [accessToken,setAccessToken] = useState(null)
 
-	const [gSentence,] = useGlobal("userInput");
+	const [gSentence, setgSentence] = useGlobal('userInput');
 
 	useEffect(() => {
 	    const hash = window.location.hash
@@ -29,7 +29,7 @@ const Success = () => {
 	    	title: gSentence,
 	    	songs: urls
 	    }
-
+	    
 	    const create = async () => {
 	    	const response = await fetch('http://localhost:8000/create',{
 				method: 'POST',
