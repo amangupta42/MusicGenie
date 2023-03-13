@@ -1,15 +1,24 @@
-import React , { useEffect } from 'reactn';
+import React , { useEffect, useState } from 'reactn';
 import { Box, Typography, Button } from '@mui/material';
 import { CONSTS } from '../../../common/Consts';
-import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 const Song = (({title, artist, image, previewUrl=null}) => {
-	const snippet = new Audio(previewUrl);
+	const [snippet, ]  = useState(new Audio(previewUrl));
+	const [isPlaying, setIsPlaying] = useState(false)
 
 	const handleSongPlay = () => {
 		if(previewUrl !== null){
+			setIsPlaying(true)
 			snippet.play()
 		}
+	}
+
+	const handleSongStop = () => {
+		snippet.pause();
+		snippet.currentTime = 0;
+		setIsPlaying(false)
 	}
 
 	// Pause audio if playing on unmount
@@ -17,6 +26,7 @@ const Song = (({title, artist, image, previewUrl=null}) => {
 		return () => {
 			snippet.pause();
 			snippet.currentTime = 0;
+			setIsPlaying(false)
 		}
 	},[])
 
@@ -66,25 +76,47 @@ const Song = (({title, artist, image, previewUrl=null}) => {
 			</Typography>
 		</Box>
 
-		<PlayCircleFilledWhiteIcon className={previewUrl === null ? 'disabled' : ''}
-		onClick={handleSongPlay}
-		sx={{
-			display: 'flex',
-			minWidth: '40px',
-			maxWidth: '40px',
-			height: '40px',
-			borderRadius: '50%',
-			backgroundColor: `${CONSTS.secondaryColor}`,
-			marginLeft: '10px',
-			cursor: 'pointer',
-			'&:hover': {
-				opacity: 0.8
-			},
-			'&.disabled': {
-				opacity: 0.4,
-				cursor: 'default'
-			}
-		}}/>
+		{
+			!isPlaying ? 
+			(<PlayCircleIcon className={previewUrl === null ? 'disabled' : ''}
+			onClick={handleSongPlay}
+			sx={{
+				display: 'flex',
+				minWidth: '40px',
+				maxWidth: '40px',
+				height: '40px',
+				borderRadius: '50%',
+				backgroundColor: `${CONSTS.secondaryColor}`,
+				marginLeft: '10px',
+				cursor: 'pointer',
+				'&:hover': {
+					opacity: 0.8
+				},
+				'&.disabled': {
+					opacity: 0.4,
+					cursor: 'default'
+				}
+			}}/>) : 
+			(<StopCircleIcon className={previewUrl === null ? 'disabled' : ''}
+			onClick={handleSongStop}
+			sx={{
+				display: 'flex',
+				minWidth: '40px',
+				maxWidth: '40px',
+				height: '40px',
+				borderRadius: '50%',
+				backgroundColor: `${CONSTS.secondaryColor}`,
+				marginLeft: '10px',
+				cursor: 'pointer',
+				'&:hover': {
+					opacity: 0.8
+				},
+				'&.disabled': {
+					opacity: 0.4,
+					cursor: 'default'
+				}
+			}}/>)
+		}
 		
 	</Box>
 	)
