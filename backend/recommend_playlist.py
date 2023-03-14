@@ -1,6 +1,7 @@
 import config as cfg
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import json
 import logging
 import pickle
 import numpy as np
@@ -13,7 +14,7 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
 def authorize():
 
     # Tell spotify which user data fields we need to access and modify
-    scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public"
+    scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
                                                    client_secret=cfg.CLIENT_SECRET,
                                                    redirect_uri=cfg.REDIRECT_URI,
@@ -44,12 +45,12 @@ def predict_genre(text : str):
         if len(top_genres) < 5:
             top_genres.append(genres[idx])
             top_scores.append(similarity_scores[idx])
-
+    print (top_genres)
     for i in range(len(top_scores) - 1):
         if abs(top_scores[i + 1]) - abs(top_scores[i]) > 2:
             top_genres = top_genres[:i + 1]
             break
-
+    print(top_genres)
     return top_genres
 
 
@@ -57,38 +58,56 @@ def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    result = sp.recommendations(seed_genres=genre_list, limit=length, **param_dict)
-
+    # result = sp.recommendations(seed_genres=genre_list, limit=50, **param_dict)
+    result = sp.new_releases(limit = 20)
     # Iterate over response from Spotify, taking track URIs from recommended tracks
+
+    print(json.dumps(result))
+    
     if result:
         track_uris = []
         track_names = []
         cover_arts = []
         artists = []
         preview_url = []
-        
-        for track in result['tracks']:
+
+        # for track in result['tracks']:
             
-            print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
-            track_uris.append(track['uri'])
-            track_names.append(track['name'])
-            cover_arts.append( track['album']['images'][0]['url'])
-            artists.append((track['album']['artists'][0])['name'])
-            preview_url.append((track['preview_url']))
+        #     print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
+        #     track_uris.append(track['uri'])
+        #     track_names.append(track['name'])
+        #     cover_arts.append( track['album']['images'][0]['url'])
+        #     artists.append((track['album']['artists'][0])['name'])
+        #     preview_url.append((track['preview_url']))
+        
+
+
+        for item in result['albums']['items']:
+            
+            print(f"Song: {item['name']}, Artist: {item['artists'][0]['name']}\n")
+            track_uris.append(item['uri'])
+            track_names.append(item['name'])
+            cover_arts.append( item['images'][0]['url'])
+            artists.append((item['artists'][0])['name'])
+            # track_info = sp.track(item['uri'])
+            # print(track_info)
+            # preview_url.append(track_info['preview_url'])
+        
         logging.info("Tracks added to playlist")
         for name in track_names:
             logging.info(name)
     else:
         logging.warning(f"Nothing was returned from Spotify for url {param_dict}.")
         raise Exception("Nothing returned from Spotify.")
+    
     return track_uris,track_names,cover_arts,artists,preview_url
 
 
 def create_spotify_playlist(track_uris, input_text, sp):
     # Creates a spotify playlist from a list of track_uris
-
+    return
     user_id = sp.me()['id']
-    playlist_to_add = f"{input_text} - DL Project"
+    playlist_to_add = f"{input_text} - MusicGenie"
 
     # Create playlist from given track URIs
     sp.user_playlist_create(user_id, playlist_to_add)

@@ -79,7 +79,7 @@ def main(text : str, length : int = 20):
                 "name" : names[i],
                 "albumArt" : cover_art[i],
                 "artist" : artists[i],
-                "soundClip" : preview_url[i]
+                "soundClip" : ""
             }
             response_json["songs"].append(curr)
         response_json = json.dumps(response_json,indent=3)
