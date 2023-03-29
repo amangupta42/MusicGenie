@@ -2,3 +2,4 @@ spotipy==2.20.0
 uvicorn
 fastapi
 gunicorn
+bz2file
