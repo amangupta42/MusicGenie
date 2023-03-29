@@ -37,5 +37,5 @@ async def get_input(request: FreeText):
     
     return Response(content=response, media_type="application/json")
 
-# if __name__ == "__main__":
-#     uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
