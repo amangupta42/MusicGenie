@@ -4,9 +4,5 @@ install.log
 .cache
 __pycache__/
 .gitattributes
-logs.log
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-.ebextensions
+logs.logs
+./models/DS_Store

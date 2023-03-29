@@ -5,21 +5,20 @@ import pickle
 import config as cfg
 from recommend_playlist import *
 import logging
+import compress
 #from parse_args import parse_args
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
 
-PARAMS = ['target_acousticness', 'target_danceability', 'target_energy', 'target_instrumentalness',
-                  'key', 'target_liveness', 'target_loudness', 'mode', 'target_speechiness',
-                  'target_tempo', 'time_signature', 'target_valence']
+PARAMS = cfg.PARAMS
 
 def embed_text(text):
     #Use a HuggingFace sentence-transformers/all-MiniLM-L6-v2 model to map sentences & paragraphs to a 384 dimensional dense vector space
 
-    with open('MiniLMTransformer.pkl', 'rb') as f:
-        embedder = pickle.load(f)
-
+    # with open('MiniLMTransformer.pkl', 'rb') as f:
+    #     embedder = pickle.load(f)
+    embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
     # Embed input text
     
     input_to_model = embedder.encode(text)
@@ -32,15 +31,20 @@ def generate_params(model_input):
     input_to_spotify_transformer = {}
 
     # Find the XGB files
-    xgboost_files = os.path.join("model/*_model_xgb_384")
+    xgboost_files = os.path.join("models/*.pbz2")
     xgboost_models = glob.glob(xgboost_files)
+    target_models=[]
+
+    for model in xgboost_models:
+        target_models.append(compress.decompress_pickle(model))
+    
 
     # Use each XGB model to predict on corresponding audio parameter
-    for parameter, model in zip(PARAMS, xgboost_models):
-        with open(model, 'rb') as f:
-            xgb_model = pickle.load(f)
-        preds = xgb_model.predict(model_input.reshape(1, -1))
+    for parameter, model in zip(PARAMS, target_models):
+        preds = model.predict(model_input.reshape(1, -1))
         input_to_spotify_transformer[parameter] = preds[0]
+
+    print(input_to_spotify_transformer)
 
     return input_to_spotify_transformer
 

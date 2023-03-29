@@ -3,8 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import json
 import logging
-import pickle
-import numpy as np
+import compress
 
 # Configuring logging 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
@@ -21,14 +20,17 @@ def authorize():
                                                    scope=scope))
     return sp
 
+def argsort(seq):
+    # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
+    return sorted(range(len(seq)), key=seq.__getitem__)
 
 def predict_genre(text : str):
     # Returns the most similar genres
 
-    with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
-        similarity_model = pickle.load(ce_file)
+    # with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
+    #     similarity_model = pickle.load(ce_file)
 
-    
+    similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
 
     # Take all combinations of the text and genre
     genres = cfg.genres
@@ -36,7 +38,7 @@ def predict_genre(text : str):
 
     # find the similarity scores between the text and each genre
     similarity_scores = similarity_model.predict(sentence_combinations)
-    sim_scores_sorted = reversed(np.argsort(similarity_scores))
+    sim_scores_sorted = reversed(sorted(similarity_scores))
 
     # Return the top genres over a given threshold
     top_genres = []

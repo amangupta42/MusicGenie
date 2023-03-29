@@ -37,6 +37,9 @@ genres = ["acoustic", "alt-rock", "alternative", "ambient", "anime",
           "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "study", "summer",
           "synth-pop", "tango", "techno", "work-out", "world-music"]
 
+PARAMS = ['target_acousticness', 'target_danceability', 'target_energy', 'target_instrumentalness',
+                  'key', 'target_liveness', 'target_loudness', 'mode', 'target_speechiness',
+                  'target_tempo', 'time_signature', 'target_valence']
 
 #Default genres if the user enteres input sentiment does not match with the above genres declared.
 default_genres = ['pop', 'rock', 'folk', 'hip-hop', 'electronic']
