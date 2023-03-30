@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useGlobal } from 'reactn';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { CONSTS } from '../../../common/Consts.jsx';
+import { Config } from '../../../common/Config.js';
 import { Options } from './Options.jsx';
 
 const EmotionInput = ({setSongsLoading}) => {
@@ -27,7 +28,8 @@ const EmotionInput = ({setSongsLoading}) => {
 		let response = null
 		let responseJSON = null
 		try {
-			response = await fetch('http://localhost:8000/input',{
+			console.log(Config.API_BASE)
+			response = await fetch(`${Config.API_BASE}/input`,{
 				method: 'POST',
 				headers: {
 			      'Content-Type': 'application/json',
