@@ -44,15 +44,14 @@ def predict_genre(text : str):
     top_genres = []
     top_scores = []
     for idx in sim_scores_sorted:
+        idx = int(idx)
         if len(top_genres) < 5:
             top_genres.append(genres[idx])
             top_scores.append(similarity_scores[idx])
-    print (top_genres)
     for i in range(len(top_scores) - 1):
         if abs(top_scores[i + 1]) - abs(top_scores[i]) > 2:
             top_genres = top_genres[:i + 1]
             break
-    print(top_genres)
     return top_genres
 
 
@@ -60,11 +59,9 @@ def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    # result = sp.recommendations(seed_genres=genre_list, limit=50, **param_dict)
-    result = sp.new_releases(limit = 20)
+    result = sp.recommendations(seed_genres=genre_list, limit=50, **param_dict)
+    # result = sp.new_releases(limit = 20)
     # Iterate over response from Spotify, taking track URIs from recommended tracks
-
-    print(json.dumps(result))
     
     if result:
         track_uris = []
@@ -72,25 +69,25 @@ def recommend(param_dict, genre_list, sp, length):
         cover_arts = []
         artists = []
         preview_url = []
-
-        # for track in result['tracks']:
+        
+        for track in result['tracks']:
             
-        #     print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
-        #     track_uris.append(track['uri'])
-        #     track_names.append(track['name'])
-        #     cover_arts.append( track['album']['images'][0]['url'])
-        #     artists.append((track['album']['artists'][0])['name'])
-        #     preview_url.append((track['preview_url']))
+            print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
+            track_uris.append(track['uri'])
+            track_names.append(track['name'])
+            cover_arts.append( track['album']['images'][0]['url'])
+            artists.append((track['album']['artists'][0])['name'])
+            preview_url.append((track['preview_url']))
         
 
 
-        for item in result['albums']['items']:
+        # for item in result['albums']['items']:
             
-            print(f"Song: {item['name']}, Artist: {item['artists'][0]['name']}\n")
-            track_uris.append(item['uri'])
-            track_names.append(item['name'])
-            cover_arts.append( item['images'][0]['url'])
-            artists.append((item['artists'][0])['name'])
+        #     print(f"Song: {item['name']}, Artist: {item['artists'][0]['name']}\n")
+        #     track_uris.append(item['uri'])
+        #     track_names.append(item['name'])
+        #     cover_arts.append( item['images'][0]['url'])
+        #     artists.append((item['artists'][0])['name'])
             # track_info = sp.track(item['uri'])
             # print(track_info)
             # preview_url.append(track_info['preview_url'])
@@ -107,7 +104,7 @@ def recommend(param_dict, genre_list, sp, length):
 
 def create_spotify_playlist(track_uris, input_text, sp):
     # Creates a spotify playlist from a list of track_uris
-    return
+    
     user_id = sp.me()['id']
     playlist_to_add = f"{input_text} - MusicGenie"
 

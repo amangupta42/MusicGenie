@@ -44,7 +44,6 @@ def generate_params(model_input):
         preds = model.predict(model_input.reshape(1, -1))
         input_to_spotify_transformer[parameter] = preds[0]
 
-    print(input_to_spotify_transformer)
 
     return input_to_spotify_transformer
 
@@ -55,8 +54,11 @@ def main(text : str, length : int = 20):
     # Generate playlist using embedded user input and predicted genre by user's criteria
 
     try:
+        print("Start")
         #Auth
         sp = authorize()
+        print("Authorized")
+
         #Genre Prediction
         genres = predict_genre(text)
         print("Predicted genre from text input: ")
@@ -67,6 +69,8 @@ def main(text : str, length : int = 20):
 
         #Generate target PARAMS
         params = generate_params(embedded_text)
+        print("predicted parameters")
+        print(params)
 
         #Recommend songs based on target params
         tracks,names,cover_art,artists,preview_url = recommend(params, genres, sp, length)
@@ -83,7 +87,7 @@ def main(text : str, length : int = 20):
                 "name" : names[i],
                 "albumArt" : cover_art[i],
                 "artist" : artists[i],
-                "soundClip" : ""
+                "soundClip" : preview_url[i]
             }
             response_json["songs"].append(curr)
         response_json = json.dumps(response_json,indent=3)
