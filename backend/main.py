@@ -38,7 +38,7 @@ async def get_input(request: FreeText):
 
     #subprocess.run(['python3', 'recommender_model.py', 'input', '-t', request.text])
     print("User Text : " + request.text)
-    print("User length : "+ request.length)
+    print("User length : "+ str(request.length))
     response = recommender_model.main(request.text, request.length)
     
     return Response(content=response, media_type="application/json")
