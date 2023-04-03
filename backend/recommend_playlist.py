@@ -38,13 +38,13 @@ def predict_genre(text : str):
 
     # find the similarity scores between the text and each genre
     similarity_scores = similarity_model.predict(sentence_combinations)
-    sim_scores_sorted = reversed(sorted(similarity_scores))
-
+    sim_scores_sorted = reversed(argsort(similarity_scores))
+    
     # Return the top genres over a given threshold
     top_genres = []
     top_scores = []
+    
     for idx in sim_scores_sorted:
-        idx = int(idx)
         if len(top_genres) < 5:
             top_genres.append(genres[idx])
             top_scores.append(similarity_scores[idx])
