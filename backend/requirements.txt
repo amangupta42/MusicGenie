@@ -3,3 +3,4 @@ uvicorn
 fastapi
 gunicorn
 bz2file
+sentence_transformers
