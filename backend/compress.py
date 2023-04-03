@@ -12,8 +12,8 @@ def compressed_pickle(title, data):
 def decompress_pickle(file):
 
     data = bz2.BZ2File(file, "rb")
-    data = pickle.load(data)
-    return data
+    model = pickle.load(data)
+    return model
 
 
 # # Find the XGB files

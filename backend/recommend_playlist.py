@@ -31,9 +31,10 @@ def predict_genre(text : str):
     #     similarity_model = pickle.load(ce_file)
 
     similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
-
+    print("Genre model decompressed")
     # Take all combinations of the text and genre
     genres = cfg.genres
+    
     sentence_combinations = [[text, genre] for genre in genres]
 
     # find the similarity scores between the text and each genre
@@ -43,7 +44,7 @@ def predict_genre(text : str):
     # Return the top genres over a given threshold
     top_genres = []
     top_scores = []
-    
+
     for idx in sim_scores_sorted:
         if len(top_genres) < 5:
             top_genres.append(genres[idx])
