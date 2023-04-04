@@ -36,10 +36,11 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     # Load the ML model
-    similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
-    print("Genre model decompressed")
+    
     embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
     print("Huggingface model decompressed")
+    similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
+    print("Genre model decompressed")
     models.append(similarity_model)
     models.append(embedder)
 
