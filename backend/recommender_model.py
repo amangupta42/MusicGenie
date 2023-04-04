@@ -77,8 +77,8 @@ def main(similarity_model, embedder, text : str, length : int = 20):
         print("Recommended tracks")
         print(tracks)
 
-        # playlist_link = create_spotify_playlist(tracks, text, sp)
-        playlist_link = ""
+        playlist_link = create_spotify_playlist(tracks, text, sp)
+        # playlist_link = ""
 
         response_json = {"playlist_link" : playlist_link, "songs" : []}
 
