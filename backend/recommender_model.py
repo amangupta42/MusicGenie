@@ -11,13 +11,13 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
 
 PARAMS = cfg.PARAMS
 
-def embed_text(text):
+def embed_text(text, embedder):
     #Use a HuggingFace sentence-transformers/all-MiniLM-L6-v2 model to map sentences & paragraphs to a 384 dimensional dense vector space
 
     # with open('MiniLMTransformer.pkl', 'rb') as f:
     #     embedder = pickle.load(f)
-    embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
-    print("Huggingface model decompressed")
+    # embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
+    # print("Huggingface model decompressed")
     # Embed input text
     
     input_to_model = embedder.encode(text)
@@ -47,7 +47,7 @@ def generate_params(model_input):
     return input_to_spotify_transformer
 
 
-def main(text : str, length : int = 20):
+def main(similarity_model, embedder, text : str, length : int = 20):
     # Get user arguments
     # args = parse_args(sys.argv[1:])
     # Generate playlist using embedded user input and predicted genre by user's criteria
@@ -59,12 +59,12 @@ def main(text : str, length : int = 20):
         print("Authorized")
 
         #Genre Prediction
-        genres = predict_genre(text)
+        genres = predict_genre(text, similarity_model)
         print("Predicted genre from text input: ")
         print(genres)
 
         #Text embedding for sentiment analysis
-        embedded_text = embed_text(text)
+        embedded_text = embed_text(text,embedder)
 
         #Generate target PARAMS
         params = generate_params(embedded_text)
@@ -77,8 +77,8 @@ def main(text : str, length : int = 20):
         print("Recommended tracks")
         print(tracks)
 
-        playlist_link = create_spotify_playlist(tracks, text, sp)
-        # playlist_link = ""
+        # playlist_link = create_spotify_playlist(tracks, text, sp)
+        playlist_link = ""
 
         response_json = {"playlist_link" : playlist_link, "songs" : []}
 

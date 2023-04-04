@@ -1,10 +1,14 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from recommend_playlist import *
 from pydantic import BaseModel
 import recommender_model
 import uvicorn
+import compress
 
+models = []
+    
 
 app = FastAPI()
 
@@ -29,6 +33,17 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+@app.on_event("startup")
+async def startup_event():
+    # Load the ML model
+    similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
+    print("Genre model decompressed")
+    embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
+    print("Huggingface model decompressed")
+    models.append(similarity_model)
+    models.append(embedder)
+
+
 @app.get("/", tags=["root"])
 async def read_root() -> dict:
     return {"message": "Welcome to playlist generator."}
@@ -39,7 +54,7 @@ async def get_input(request: FreeText):
     #subprocess.run(['python3', 'recommender_model.py', 'input', '-t', request.text])
     print("User Text : " + request.text)
     print("User length : "+ str(request.length))
-    response = recommender_model.main(request.text, request.length)
+    response = recommender_model.main(models[0], models[1], request.text, request.length)
     
     return Response(content=response, media_type="application/json")
 

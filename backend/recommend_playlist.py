@@ -23,14 +23,14 @@ def argsort(seq):
     # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
     return sorted(range(len(seq)), key=seq.__getitem__)
 
-def predict_genre(text : str):
+def predict_genre(text : str, similarity_model):
     # Returns the most similar genres
 
     # with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
     #     similarity_model = pickle.load(ce_file)
 
-    similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
-    print("Genre model decompressed")
+    # similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
+    # print("Genre model decompressed")
 
     # Take all combinations of the text and genre
     genres = cfg.genres
