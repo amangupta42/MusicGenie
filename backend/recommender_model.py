@@ -1,12 +1,10 @@
 import json
 import glob
 import os
-import pickle
 import config as cfg
 from recommend_playlist import *
 import logging
 import compress
-#from parse_args import parse_args
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
@@ -19,6 +17,7 @@ def embed_text(text):
     # with open('MiniLMTransformer.pkl', 'rb') as f:
     #     embedder = pickle.load(f)
     embedder = compress.decompress_pickle("MiniLMTransformer.pbz2")
+    print("Huggingface model decompressed")
     # Embed input text
     
     input_to_model = embedder.encode(text)
@@ -79,6 +78,7 @@ def main(text : str, length : int = 20):
         print(tracks)
 
         playlist_link = create_spotify_playlist(tracks, text, sp)
+        # playlist_link = ""
 
         response_json = {"playlist_link" : playlist_link, "songs" : []}
 

@@ -1,7 +1,6 @@
 import config as cfg
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import json
 import logging
 import compress
 
@@ -32,6 +31,7 @@ def predict_genre(text : str):
 
     similarity_model = compress.decompress_pickle("CrossEncoder_GenrePicker.pbz2")
     print("Genre model decompressed")
+
     # Take all combinations of the text and genre
     genres = cfg.genres
     
