@@ -3,4 +3,4 @@ uvicorn
 fastapi
 gunicorn
 bz2file
-sentence_transformers==2.2.2
+sentence_transformers<=2.2.2
