@@ -3,5 +3,6 @@ uvicorn
 fastapi
 gunicorn
 bz2file
+xgboost==1.6.1
 sentence-transformers<=2.2.2
 transformers<=4.20.1
