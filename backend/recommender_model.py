@@ -47,16 +47,13 @@ def generate_params(model_input):
     return input_to_spotify_transformer
 
 
-def main(similarity_model, embedder, text : str, length : int = 20):
+def main(sp, similarity_model, embedder, text : str, length : int = 20):
     # Get user arguments
     # args = parse_args(sys.argv[1:])
     # Generate playlist using embedded user input and predicted genre by user's criteria
 
     try:
-        print("Start")
-        #Auth
-        sp = authorize()
-        print("Authorized")
+        print("Request Start")
 
         #Genre Prediction
         genres = predict_genre(text, similarity_model)
@@ -77,8 +74,8 @@ def main(similarity_model, embedder, text : str, length : int = 20):
         print("Recommended tracks")
         print(tracks)
 
-        playlist_link = create_spotify_playlist(tracks, text, sp)
-        # playlist_link = ""
+        # playlist_link = create_spotify_playlist(tracks, text, sp)
+        playlist_link = ""
 
         response_json = {"playlist_link" : playlist_link, "songs" : []}
 

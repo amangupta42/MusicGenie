@@ -1,6 +1,5 @@
 import config as cfg
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 import logging
 import compress
 
@@ -9,15 +8,7 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
                     level=logging.INFO)
 
 
-def authorize():
 
-    # Tell spotify which user data fields we need to access and modify
-    scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
-                                                   client_secret=cfg.CLIENT_SECRET,
-                                                   redirect_uri=cfg.REDIRECT_URI,
-                                                   scope=scope))
-    return sp
 
 def argsort(seq):
     # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
