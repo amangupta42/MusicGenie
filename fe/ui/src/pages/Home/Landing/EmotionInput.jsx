@@ -28,7 +28,6 @@ const EmotionInput = ({setSongsLoading}) => {
 		let response = null
 		let responseJSON = null
 		try {
-			console.log(Config.API_BASE)
 			response = await fetch(`${Config.API_BASE}/input`,{
 				method: 'POST',
 				headers: {
@@ -42,7 +41,7 @@ const EmotionInput = ({setSongsLoading}) => {
 			// storing spotifySongUrls to provide during playlist create call
 			// console.log(responseJSON)
 			const urls = []
-			 responseJSON.songs.forEach((song) => {urls.push(song.songUrl)});
+			responseJSON.songs.forEach((song) => {urls.push(song.trackUrl)});
 			window.localStorage.setItem('song_urls', JSON.stringify(urls))
 
 			setgSongsLoaded(true)
