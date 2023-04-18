@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 from recommend_playlist import *
 from pydantic import BaseModel
 import recommender_model
@@ -37,14 +36,6 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     #Auth
-    #User Login Flow
-    # Tell spotify which user data fields we need to access and modify
-    # scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
-    # sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
-    #                                                client_secret=cfg.CLIENT_SECRET,
-    #                                                redirect_uri=cfg.REDIRECT_URI,
-    #                                                scope=scope))
-
     # App Only Flow
     client_id = cfg.CLIENT_ID
     client_secret = cfg.CLIENT_SECRET
@@ -75,6 +66,21 @@ async def get_input(request: FreeText):
     response = recommender_model.main(prereqs[0], prereqs[1], prereqs[2], request.text, request.length)
     
     return Response(content=response, media_type="application/json")
+
+@app.post("/create")
+async def create_playlist(request : BaseModel):
+    print("Logging in")
+    # User Login Flow
+    # Tell spotify which user data fields we need to access and modify
+    scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
+                                                   client_secret=cfg.CLIENT_SECRET,
+                                                   redirect_uri=cfg.REDIRECT_URI,
+                                                   scope=scope))
+    response = recommender_model.create_spotify_playlist(request.trackUrl,request.text, sp)
+
+    return Response(content = response, media_type = "application/json")
+    
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=8000, reload=True)
