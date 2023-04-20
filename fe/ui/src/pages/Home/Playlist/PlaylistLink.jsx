@@ -2,13 +2,14 @@ import React, { useGlobal } from 'reactn';
 import { Box, Typography, Link } from '@mui/material';
 import { CONSTS } from '../../../common/Consts';
 import { Config } from '../../../common/Config.js';
-// import LoginUrl from './spotify.js';
+import { loginUrl } from './spotify.js';
 
 const PlaylistLink = () => {
 	const [gPlaylistLink,] = useGlobal('playlist_link');
 	const [gSentence,] = useGlobal('userInput');
 
 	const handleSpotifyClick = async () => {
+		window.location.href = loginUrl
 		const urls = JSON.parse(window.localStorage.getItem('song_urls'))
 		const dataObj = {
 			trackUrls : urls,
@@ -41,7 +42,7 @@ const PlaylistLink = () => {
 				background: `${CONSTS.spotifyGreen}`
 			}
 		}}>
-			<Link onClick={handleSpotifyClick} sx={{
+			<Link onClick={() => {window.location.href = loginUrl}} sx={{
 				color:`white`,
 				textDecoration: 'inherit',
 				cursor: 'pointer'

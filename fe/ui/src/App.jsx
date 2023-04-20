@@ -28,8 +28,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Routes>
-          <Route exact path="/" element={<Home />}>
-          </Route>
+          <Route exact path="/" element={<Home />}/>
+          <Route exact path="/success" element={<Success />}/>
+          
         </Routes>
       </div>
     </ThemeProvider>

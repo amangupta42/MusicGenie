@@ -3,35 +3,42 @@ import { Box, Typography } from '@mui/material';
 
 import { BaseContainer } from '../../common/Components';
 import { Header } from './Header';
+import { Config } from '../../common/Config.js';
 
 const Success = () => {
-	const [accessToken,setAccessToken] = useState(null)
+	const [authCode,setAuthCode] = useState(null)
 
 	const [gSentence, setgSentence] = useGlobal('userInput');
 
 	useEffect(() => {
-	    const hash = window.location.hash
-	    let token = window.localStorage.getItem("token")
+		const urlParams = new URLSearchParams(window.location.search);
+		const authCode = urlParams.get('code');
+	    // const hash = window.location.hash
+	    // let authCode = window.localStorage.getItem("authCode")
 
-	    if (!token && hash) {
-	        token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+	    // if (!authCode && hash) {
+	    //     authCode = hash.substring(1).split("&").find(elem => elem.startsWith("code")).split("=")[1]
 
-	        window.location.hash = ""
-	        window.localStorage.setItem("token", token)
+	    //     window.location.hash = ""
+	    
+	    // }
+
+	    if(authCode){
+	    	window.localStorage.setItem("authCode", authCode)
 	    }
 
-	    setAccessToken(token)
+	    setAuthCode(authCode)
 
 	    let urls = JSON.parse(window.localStorage.getItem('song_urls'));
 
 	    const dataObj = {
-	    	token: token,
+	    	authCode: authCode,
 	    	title: gSentence,
-	    	songs: urls
+	    	trackUrls: urls
 	    }
 	    
 	    const create = async () => {
-	    	const response = await fetch('http://localhost:8000/create',{
+	    	const response = await fetch(`${Config.API_BASE}/create`,{
 				method: 'POST',
 				headers: {
 			      'Content-Type': 'application/json',
