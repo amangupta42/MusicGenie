@@ -6,6 +6,7 @@ import recommender_model
 import uvicorn
 import spotipy
 import compress
+from spotipy.oauth2 import SpotifyOAuth
 
 prereqs = []
 
@@ -13,21 +14,29 @@ prereqs = []
 app = FastAPI()
 
 origins = [
-    # '*',
+    # '*'
     'http://localhost',
     'http://localhost:8080',
     'http://localhost:3000',
+    'http://localhost:3001'
     'https://amangupta42.github.io'
+    'https://amangupta42.github.io/MusicGenie'
     ]
 
 class FreeText(BaseModel):
     text: str
     length: int
 
+class Playlist(BaseModel):
+    authCode: str
+    title: str
+    trackUrls: list[str]
+    
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -68,18 +77,33 @@ async def get_input(request: FreeText):
     return Response(content=response, media_type="application/json")
 
 @app.post("/create")
-async def create_playlist(request : BaseModel):
+async def create_playlist(request: Playlist):
+    print(request)
     print("Logging in")
     # User Login Flow
     # Tell spotify which user data fields we need to access and modify
-    scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
-                                                   client_secret=cfg.CLIENT_SECRET,
-                                                   redirect_uri=cfg.REDIRECT_URI,
-                                                   scope=scope))
-    response = recommender_model.create_spotify_playlist(request.trackUrl,request.text, sp)
+    # print(request)
+    # scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public user-read-recently-played"
+    # sp2 = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
+    #                                                client_secret=cfg.CLIENT_SECRET,
+    #                                                redirect_uri=cfg.REDIRECT_URI,
+    #                                                scope=scope))
+    # print(sp2)
+
+    oauth = SpotifyOAuth(client_id=cfg.CLIENT_ID,
+                     client_secret=cfg.CLIENT_SECRET,
+                     redirect_uri=cfg.REDIRECT_URI,
+                     scope="user-read-playback-state,user-modify-playback-state,playlist-modify-public,user-read-recently-played")
+
+    access_token = oauth.get_access_token(request.authCode)
+    sp = spotipy.Spotify(auth=access_token['access_token'])
+
+    response = recommender_model.create_spotify_playlist(request.trackUrls,request.title, sp)
 
     return Response(content = response, media_type = "application/json")
+
+    # return {"message: playlist"}
+
     
 
 if __name__ == "__main__":
