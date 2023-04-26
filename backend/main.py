@@ -7,6 +7,7 @@ import uvicorn
 import spotipy
 import compress
 from spotipy.oauth2 import SpotifyOAuth
+import config as cfg
 
 prereqs = []
 
@@ -46,9 +47,7 @@ app.add_middleware(
 async def startup_event():
     #Auth
     # App Only Flow
-    client_id = cfg.CLIENT_ID
-    client_secret = cfg.CLIENT_SECRET
-    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    client_credentials_manager = SpotifyClientCredentials(client_id=cfg.CLIENT_ID, client_secret=cfg.CLIENT_SECRET)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     prereqs.append(sp)
     print("Authorized")

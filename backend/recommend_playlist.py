@@ -1,10 +1,9 @@
-import config as cfg
+import config as keys
 from spotipy.oauth2 import SpotifyClientCredentials
 import logging
-import compress
-
+import config as keys
 # Configuring logging 
-logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
+logging.basicConfig(filename=keys.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
 
 
@@ -24,7 +23,7 @@ def predict_genre(text : str, similarity_model):
     # print("Genre model decompressed")
 
     # Take all combinations of the text and genre
-    genres = cfg.genres
+    genres = keys.GENRES
     
     sentence_combinations = [[text, genre] for genre in genres]
 
@@ -51,7 +50,7 @@ def recommend(param_dict, genre_list, sp, length):
     # Generates a list of track_URIs from the given params
 
     # Call Spotify recommendations API 
-    result = sp.recommendations(seed_genres=genre_list, limit=50, **param_dict)
+    result = sp.recommendations(seed_genres=genre_list, limit=length, **param_dict)
     # result = sp.new_releases(limit = 20)
     # Iterate over response from Spotify, taking track URIs from recommended tracks
     

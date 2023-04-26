@@ -1,8 +1,9 @@
 import bz2file as bz2
 import pickle
-import config as cfg
+import config as keys
 
-PARAMS = cfg.PARAMS
+
+PARAMS = keys.PARAMS
 
 def compressed_pickle(title, data):
     with bz2.BZ2File(title + ".pbz2", "w") as f:

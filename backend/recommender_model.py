@@ -1,15 +1,16 @@
 import json
 import glob
 import os
-import config as cfg
+import config as keys
 from recommend_playlist import *
 import logging
 import compress
 
-logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
+
+logging.basicConfig(filename=keys.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
 
-PARAMS = cfg.PARAMS
+PARAMS = keys.PARAMS
 
 def embed_text(text, embedder):
     #Use a HuggingFace sentence-transformers/all-MiniLM-L6-v2 model to map sentences & paragraphs to a 384 dimensional dense vector space
